@@ -13,7 +13,7 @@
 </head>
 <body>
   <header th:fragment="topbar(heading, activeNav)" class="topbar">
-    <div class="brand">
+    <a th:href="@{/}" class="brand" title="Back to Dashboard">
       <span class="brand-icon" aria-hidden="true">
         <i class="fa-solid fa-book"></i>
       </span>
@@ -21,7 +21,7 @@
         <p class="eyebrow">Library Management</p>
         <h1 th:text="${heading}">Dashboard</h1>
       </div>
-    </div>
+    </a>
     <nav class="topnav" aria-label="Main navigation">
       <a th:href="@{/users}" class="btn btn-sm" th:classappend="${activeNav == 'users'} ? 'btn-primary' : 'btn-ghost'">Users</a>
       <a th:href="@{/books}" class="btn btn-sm" th:classappend="${activeNav == 'books'} ? 'btn-primary' : 'btn-ghost'">Books</a>

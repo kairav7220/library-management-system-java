@@ -386,8 +386,8 @@ function parseSSE(chunk, handlers) {
     var text = new TextDecoder().decode(chunk);
     text.split('\n').forEach(function (line) {
         line = line.replace(/\r$/, '');
-        if (line.indexOf('data: ') === 0) {
-            var payload = line.slice(6);
+        if (line.indexOf('data:') === 0) {
+            var payload = line.slice(5).trim();
             try {
                 var evt = JSON.parse(payload);
                 if (evt.type === 'delta' && evt.text) handlers.delta(evt.text);

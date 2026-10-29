@@ -74,12 +74,20 @@ public class ChatController {
     }
 
     @PostMapping(value = "/chat/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter stream(@RequestBody ChatRequest request) {
+    public SseEmitter stream(@RequestBody ChatRequest request, jakarta.servlet.http.HttpServletResponse httpResponse) {
+        httpResponse.setHeader("Cache-Control", "no-cache");
+        httpResponse.setHeader("X-Accel-Buffering", "no");
+
         String message = request.message() == null ? "" : request.message().trim();
         String sessionId = (request.sessionId() == null || request.sessionId().isBlank())
                 ? "default" : request.sessionId().trim();
 
         SseEmitter emitter = new SseEmitter(0L);
+        try {
+            emitter.send(SseEmitter.event().comment("connected"));
+        } catch (IOException ignored) {
+        }
+
         String memberRef = resolveMemberRef();
         executor.execute(() -> {
             ChatContext.setMemberRef(memberRef);
