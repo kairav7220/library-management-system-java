@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head('Return book issue · Library')}"></head>
+<body>
+  <div class="page">
+    <header th:replace="~{base :: topbar('Return book issue', 'issues')}"></header>
+    <div th:replace="~{base :: flash}"></div>
+
+    <main class="panel">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-rotate-left"></i> Return book issue</h2>
+        <a th:href="@{/book_issue}" class="btn btn-ghost"><i class="fa-solid fa-arrow-left"></i> Back</a>
+      </div>
+
+      <div class="summary-card">
+        <span class="summary-avatar"><i class="fa-solid fa-book-open-reader"></i></span>
+        <div class="summary-body">
+          <h2 th:text="${issue.bookId}">BOOK_1</h2>
+          <p class="summary-meta">
+            <li><i class="fa-solid fa-id-badge"></i> <span th:text="${issue.transactionId}">TXN_1</span></li>
+            <li><i class="fa-solid fa-user"></i> <span th:text="${issue.issuedTo}">MEM_1</span></li>
+            <li><i class="fa-solid fa-calendar"></i> <span th:text="${issue.issuedDate}">—</span></li>
+          </p>
+        </div>
+      </div>
+
+      <p class="readonly-id" th:text="'row_num: ' + ${rowNum}">row_num: 1</p>
+
+      <form class="edit-form" th:action="@{/book_issue/return/{rowNum}(rowNum=${rowNum})}" method="post">
+        <div class="form-group">
+          <label for="recieved_by"><i class="fa-solid fa-user-check"></i> Received by (employee)</label>
+          <select id="recieved_by" name="recieved_by" required>
+            <option value="">Select employee…</option>
+            <option th:each="e : ${employees}" th:value="${e.id}" th:text="${e.label}">EMP_1 — Employee</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <a th:href="@{/book_issue}" class="btn btn-ghost">Cancel</a>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </main>
+
+    <footer th:replace="~{base :: footer}"></footer>
+  </div>
+
+  <div th:replace="~{chat_widget :: widget}"></div>
+</body>
+</html>

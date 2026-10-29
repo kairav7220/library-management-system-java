@@ -1,0 +1,70 @@
+<th:block xmlns:th="http://www.thymeleaf.org" th:fragment="widget">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+
+  <button type="button" class="launcher" id="launcher" onclick="openWidget()" aria-label="Ask the library">
+      <span class="launcher-icon material-symbols-outlined">menu_book</span>
+      <span class="launcher-text">Ask the Library</span>
+      <span class="badge" id="badge" hidden>0</span>
+  </button>
+
+  <div class="widget" id="widget" role="dialog" aria-label="Library assistant chat" aria-hidden="true">
+      <header class="widget-head">
+          <div class="widget-head-id">
+              <div class="avatar avatar-sm">
+                  <span class="material-symbols-outlined">menu_book</span>
+              </div>
+              <div>
+                  <h2 class="headline-sm">Library Assistant</h2>
+                  <p class="label-sm head-sub">Always helpful</p>
+              </div>
+          </div>
+          <div class="head-actions">
+              <button type="button" class="icon-btn" id="historyBtn" onclick="showSessions()" aria-label="Chat history" title="History">
+                  <span class="material-symbols-outlined">history</span>
+              </button>
+              <button type="button" class="icon-btn" id="resetBtn" onclick="resetChat()" aria-label="Start new chat" title="New chat">
+                  <span class="material-symbols-outlined">add_comment</span>
+              </button>
+              <button type="button" class="icon-btn" onclick="closeWidget()" aria-label="Close chat">
+                  <span class="material-symbols-outlined">close</span>
+              </button>
+          </div>
+      </header>
+
+      <main class="thread" id="thread" role="log" aria-live="polite">
+          <div class="msg bot" id="greeting">
+              <div class="msg-row">
+                  <div class="avatar avatar-bot">
+                      <span class="material-symbols-outlined">menu_book</span>
+                  </div>
+                  <div class="bubble">Welcome to the Reference Desk. Ask me to find a book, register a member, issue a book, or pull up library stats.</div>
+              </div>
+          </div>
+      </main>
+
+      <div class="session-list" id="sessionList" hidden>
+          <div class="session-list-head">
+              <button type="button" class="back-btn" onclick="hideSessions()" aria-label="Back to chat">
+                  <span class="material-symbols-outlined">arrow_back</span>
+              </button>
+              <span>Chat history</span>
+          </div>
+          <div class="session-list-body" id="sessionListBody"></div>
+      </div>
+
+      <footer class="composer">
+          <div class="input-wrap">
+              <textarea id="input" rows="1" placeholder="Type your message..." autocomplete="off" aria-label="Your message" onkeydown="onKey(event)"></textarea>
+          </div>
+          <button type="button" class="send-btn" onclick="send()" aria-label="Send">
+              <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+          </button>
+      </footer>
+  </div>
+
+  <link rel="stylesheet" th:href="@{/styles/chat.css}">
+  <script th:src="@{/js/chat.js}" defer></script>
+</th:block>

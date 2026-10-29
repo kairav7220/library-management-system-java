@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head('Payments · Library')}"></head>
+<body>
+  <div class="page">
+    <header th:replace="~{base :: topbar('Payments', 'payments')}"></header>
+    <div th:replace="~{base :: flash}"></div>
+
+    <main class="panel">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-table-list"></i> Payments</h2>
+        <a th:href="@{/payments/add}" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>transaction_date</th>
+              <th>timestamp</th>
+              <th>payment_amount</th>
+              <th>payment_type</th>
+              <th>payment_mode</th>
+              <th>payment_status</th>
+              <th>paid_by</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="payment : ${payments}">
+              <td data-label="transaction_date" th:text="${payment.transactionDate}">—</td>
+              <td data-label="timestamp" th:text="${payment.timestamp}">—</td>
+              <td data-label="payment_amount" th:text="${payment.paymentAmount}">—</td>
+              <td data-label="payment_type" th:text="${payment.paymentType}">—</td>
+              <td data-label="payment_mode" th:text="${payment.paymentMode}">—</td>
+              <td data-label="payment_status" th:text="${payment.paymentStatus}">—</td>
+              <td data-label="paid_by" th:text="${payment.paidBy}">—</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(payments)}">
+              <td colspan="7" class="empty-state"><i class="fa-solid fa-inbox"></i><p>No payments found.</p></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <footer th:replace="~{base :: footer}"></footer>
+  </div>
+
+  <div th:replace="~{chat_widget :: widget}"></div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head('Edit user · Library')}"></head>
+<body>
+  <div class="page">
+    <header th:replace="~{base :: topbar('Edit user', 'users')}"></header>
+    <div th:replace="~{base :: flash}"></div>
+
+    <main class="panel">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-user-pen"></i> Edit user</h2>
+        <a th:href="@{/users}" class="btn btn-ghost"><i class="fa-solid fa-arrow-left"></i> Back</a>
+      </div>
+
+      <div class="summary-card">
+        <span class="summary-avatar"><i class="fa-solid fa-user"></i></span>
+        <div class="summary-body">
+          <h2 th:text="${user.username}">admin</h2>
+          <p class="summary-meta">
+            <li><i class="fa-solid fa-id-badge"></i> <span th:text="${user.userId}">USER_1</span></li>
+            <li th:classappend="${user.status == 0} ? 'ok' : 'bad'">
+              <i class="fa-solid fa-circle-check" th:if="${user.status == 0}"></i>
+              <i class="fa-solid fa-circle-xmark" th:unless="${user.status == 0}"></i>
+              <span th:text="${user.status == 0} ? 'Active' : 'Deleted'">Active</span>
+            </li>
+          </p>
+        </div>
+      </div>
+
+      <p class="readonly-id" th:text="'row_num: ' + ${rowNum}">row_num: 1</p>
+
+      <form class="edit-form" th:action="@{/users/edit/{rowNum}(rowNum=${rowNum})}" method="post">
+        <div class="form-group">
+          <label for="username"><i class="fa-solid fa-user"></i> Username</label>
+          <input id="username" type="text" name="username" th:value="${user.username}" readonly>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="password"><i class="fa-solid fa-lock"></i> Password (leave blank to keep)</label>
+            <input id="password" type="password" name="password">
+          </div>
+          <div class="form-group">
+            <label for="phone"><i class="fa-solid fa-phone"></i> Phone</label>
+            <input id="phone" type="text" name="phone" th:value="${user.phone}" autocomplete="off">
+          </div>
+        </div>
+        <div class="form-actions">
+          <a th:href="@{/users}" class="btn btn-ghost">Cancel</a>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </main>
+
+    <footer th:replace="~{base :: footer}"></footer>
+  </div>
+
+  <div th:replace="~{chat_widget :: widget}"></div>
+</body>
+</html>

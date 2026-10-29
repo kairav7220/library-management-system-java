@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head('Users · Library')}"></head>
+<body>
+  <div class="page">
+    <header th:replace="~{base :: topbar('Active users', 'users')}"></header>
+    <div th:replace="~{base :: flash}"></div>
+
+    <main class="panel">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-table-list"></i> Users</h2>
+        <a th:href="@{/users/add}" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>user_type</th>
+              <th>username</th>
+              <th>email</th>
+              <th>phone</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="user : ${users}">
+              <td data-label="user_type" th:text="${user.userType}">Admin</td>
+              <td data-label="username" th:text="${user.username}">admin</td>
+              <td data-label="email" th:text="${user.email}">—</td>
+              <td data-label="phone" th:text="${user.phone}">—</td>
+              <td data-label="Actions">
+                <div class="row-actions">
+                  <a th:href="@{/users/edit/{rowNum}(rowNum=${user.rowNum})}" class="btn-icon edit-btn" title="Edit"><i class="fa-solid fa-pencil"></i></a>
+                  <form th:action="@{/users/delete/{rowNum}(rowNum=${user.rowNum})}" method="post" style="display:inline" onsubmit="return confirm('Delete this user?')"><button type="submit" class="btn-icon delete-btn" title="Delete"><i class="fa-solid fa-trash-can"></i></button></form>
+                </div>
+              </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(users)}">
+              <td colspan="5" class="empty-state"><i class="fa-solid fa-inbox"></i><p>No active users found.</p></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <footer th:replace="~{base :: footer}"></footer>
+  </div>
+
+  <div th:replace="~{chat_widget :: widget}"></div>
+</body>
+</html>

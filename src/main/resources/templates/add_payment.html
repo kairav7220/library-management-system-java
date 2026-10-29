@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head('Add payment · Library')}"></head>
+<body>
+  <div class="page">
+    <header th:replace="~{base :: topbar('Add payment', 'payments')}"></header>
+    <div th:replace="~{base :: flash}"></div>
+
+    <main class="panel">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-plus-circle"></i> Add payment</h2>
+        <a th:href="@{/payments}" class="btn btn-ghost"><i class="fa-solid fa-arrow-left"></i> Back</a>
+      </div>
+      <form class="edit-form" th:action="@{/payments/add}" method="post">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="payment_amount"><i class="fa-solid fa-dollar-sign"></i> Amount</label>
+            <input id="payment_amount" type="number" step="0.01" name="payment_amount" required>
+          </div>
+          <div class="form-group">
+            <label for="payment_type"><i class="fa-solid fa-tag"></i> Type</label>
+            <input id="payment_type" type="text" name="payment_type" autocomplete="off">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="payment_mode"><i class="fa-solid fa-credit-card"></i> Mode</label>
+            <input id="payment_mode" type="text" name="payment_mode" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="paid_by"><i class="fa-solid fa-user"></i> Paid by (member)</label>
+            <select id="paid_by" name="paid_by">
+              <option value="">Select member…</option>
+              <option th:each="m : ${members}" th:value="${m.id}" th:text="${m.label}">MEM_1 — Member</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="recieved_by"><i class="fa-solid fa-user-check"></i> Received by (employee)</label>
+          <select id="recieved_by" name="recieved_by">
+            <option value="">Select employee…</option>
+            <option th:each="e : ${employees}" th:value="${e.id}" th:text="${e.label}">EMP_1 — Employee</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <a th:href="@{/payments}" class="btn btn-ghost">Cancel</a>
+          <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+      </form>
+    </main>
+
+    <footer th:replace="~{base :: footer}"></footer>
+  </div>
+
+  <div th:replace="~{chat_widget :: widget}"></div>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head('Edit employee · Library')}"></head>
+<body>
+  <div class="page">
+    <header th:replace="~{base :: topbar('Edit employee', 'employees')}"></header>
+    <div th:replace="~{base :: flash}"></div>
+
+    <main class="panel">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-user-pen"></i> Edit employee</h2>
+        <a th:href="@{/employees}" class="btn btn-ghost"><i class="fa-solid fa-arrow-left"></i> Back</a>
+      </div>
+
+      <div class="summary-card">
+        <span class="summary-avatar"><i class="fa-solid fa-user-tie"></i></span>
+        <div class="summary-body">
+          <h2 th:text="${employee.name}">Employee</h2>
+          <p class="summary-meta">
+            <li><i class="fa-solid fa-id-badge"></i> <span th:text="${employee.empId}">EMP_1</span></li>
+            <li th:classappend="${employee.status == 0} ? 'ok' : 'bad'">
+              <i class="fa-solid fa-circle-check" th:if="${employee.status == 0}"></i>
+              <i class="fa-solid fa-circle-xmark" th:unless="${employee.status == 0}"></i>
+              <span th:text="${employee.status == 0} ? 'Active' : 'Deleted'">Active</span>
+            </li>
+          </p>
+        </div>
+      </div>
+
+      <p class="readonly-id" th:text="'row_num: ' + ${rowNum}">row_num: 1</p>
+
+      <form class="edit-form" th:action="@{/employees/edit/{rowNum}(rowNum=${rowNum})}" method="post">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name"><i class="fa-solid fa-user"></i> Name</label>
+            <input id="name" type="text" name="name" th:value="${employee.name}" required autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="password"><i class="fa-solid fa-lock"></i> Password (leave blank to keep)</label>
+            <input id="password" type="password" name="password">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email"><i class="fa-solid fa-envelope"></i> Email</label>
+            <input id="email" type="email" name="email" th:value="${employee.email}" required>
+          </div>
+          <div class="form-group">
+            <label for="phone"><i class="fa-solid fa-phone"></i> Phone</label>
+            <input id="phone" type="text" name="phone" th:value="${employee.phone}" autocomplete="off">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="designation"><i class="fa-solid fa-briefcase"></i> Designation</label>
+            <input id="designation" type="text" name="designation" th:value="${employee.designation}" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="salary"><i class="fa-solid fa-dollar-sign"></i> Salary</label>
+            <input id="salary" type="number" step="0.01" name="salary" th:value="${employee.salary}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="permanent_address"><i class="fa-solid fa-location-dot"></i> Permanent address</label>
+          <input id="permanent_address" type="text" name="permanent_address" th:value="${employee.permanentAddress}" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="temporary_address"><i class="fa-solid fa-location-dot"></i> Temporary address</label>
+          <input id="temporary_address" type="text" name="temporary_address" th:value="${employee.temporaryAddress}" autocomplete="off">
+        </div>
+        <div class="form-actions">
+          <a th:href="@{/employees}" class="btn btn-ghost">Cancel</a>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </main>
+
+    <footer th:replace="~{base :: footer}"></footer>
+  </div>
+
+  <div th:replace="~{chat_widget :: widget}"></div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head('Edit book sell · Library')}"></head>
+<body>
+  <div class="page">
+    <header th:replace="~{base :: topbar('Edit book sell', 'sells')}"></header>
+    <div th:replace="~{base :: flash}"></div>
+
+    <main class="panel">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-pen-to-square"></i> Edit sell record</h2>
+        <a th:href="@{/book_sell}" class="btn btn-ghost"><i class="fa-solid fa-arrow-left"></i> Back</a>
+      </div>
+
+      <div class="summary-card">
+        <span class="summary-avatar"><i class="fa-solid fa-book"></i></span>
+        <div class="summary-body">
+          <h2 th:text="${sell.bookName}">Book</h2>
+          <p class="summary-meta">
+            <li><i class="fa-solid fa-id-badge"></i> <span th:text="${sell.orderId}">ORDER_1</span></li>
+          </p>
+        </div>
+      </div>
+
+      <p class="readonly-id" th:text="'row_num: ' + ${rowNum}">row_num: 1</p>
+
+      <form class="edit-form" th:action="@{/book_sell/edit/{rowNum}(rowNum=${rowNum})}" method="post">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="book_id"><i class="fa-solid fa-book"></i> Book</label>
+            <select id="book_id" name="book_id" required>
+              <option value="">Select book…</option>
+              <option th:each="b : ${books}" th:value="${b.id}" th:text="${b.label}"
+                      th:selected="${b.id == sell.bookId}">BOOK_1 — Book</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="book_name"><i class="fa-solid fa-heading"></i> Book name</label>
+            <input id="book_name" type="text" name="book_name" th:value="${sell.bookName}" required autocomplete="off">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="book_price"><i class="fa-solid fa-dollar-sign"></i> Price</label>
+            <input id="book_price" type="number" step="0.01" name="book_price" th:value="${sell.bookPrice}" required>
+          </div>
+          <div class="form-group">
+            <label for="mem_id"><i class="fa-solid fa-user"></i> Member</label>
+            <select id="mem_id" name="mem_id" required>
+              <option value="">Select member…</option>
+              <option th:each="m : ${members}" th:value="${m.id}" th:text="${m.label}"
+                      th:selected="${m.id == sell.memId}">MEM_1 — Member</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-actions">
+          <a th:href="@{/book_sell}" class="btn btn-ghost">Cancel</a>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </main>
+
+    <footer th:replace="~{base :: footer}"></footer>
+  </div>
+
+  <div th:replace="~{chat_widget :: widget}"></div>
+</body>
+</html>

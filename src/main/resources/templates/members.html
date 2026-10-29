@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head('Members · Library')}"></head>
+<body>
+  <div class="page">
+    <header th:replace="~{base :: topbar('Members', 'members')}"></header>
+    <div th:replace="~{base :: flash}"></div>
+
+    <main class="panel">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-table-list"></i> Members</h2>
+        <a th:href="@{/members/add}" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>name</th>
+              <th>user_id</th>
+              <th>email</th>
+              <th>phone</th>
+              <th>user_row_num</th>
+              <th>permanent_address</th>
+              <th>temporary_address</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="member : ${members}">
+              <td data-label="name" th:text="${member.name}">—</td>
+              <td data-label="user_id" th:text="${member.userId}">—</td>
+              <td data-label="email" th:text="${member.email}">—</td>
+              <td data-label="phone" th:text="${member.phone}">—</td>
+              <td data-label="user_row_num" th:text="${member.userRowNum}">—</td>
+              <td data-label="permanent_address" th:text="${member.permanentAddress}">—</td>
+              <td data-label="temporary_address" th:text="${member.temporaryAddress}">—</td>
+              <td data-label="Actions">
+                <div class="row-actions">
+                  <a th:href="@{/members/edit/{rowNum}(rowNum=${member.rowNum})}" class="btn-icon edit-btn" title="Edit"><i class="fa-solid fa-pencil"></i></a>
+                  <form th:action="@{/members/delete/{rowNum}(rowNum=${member.rowNum})}" method="post" style="display:inline" onsubmit="return confirm('Delete this member?')"><button type="submit" class="btn-icon delete-btn" title="Delete"><i class="fa-solid fa-trash-can"></i></button></form>
+                </div>
+              </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(members)}">
+              <td colspan="8" class="empty-state"><i class="fa-solid fa-inbox"></i><p>No active members found.</p></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <footer th:replace="~{base :: footer}"></footer>
+  </div>
+
+  <div th:replace="~{chat_widget :: widget}"></div>
+</body>
+</html>

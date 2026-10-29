@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head('Add book category · Library')}"></head>
+<body>
+  <div class="page">
+    <header th:replace="~{base :: topbar('Add book category', 'categories')}"></header>
+    <div th:replace="~{base :: flash}"></div>
+
+    <main class="panel">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-book-circle-plus"></i> Add category</h2>
+        <a th:href="@{/book_cat}" class="btn btn-ghost"><i class="fa-solid fa-arrow-left"></i> Back</a>
+      </div>
+      <form class="edit-form" th:action="@{/book_cat/add}" method="post">
+        <div class="form-group">
+          <label for="cat_name"><i class="fa-solid fa-tag"></i> Category name</label>
+          <input id="cat_name" type="text" name="cat_name" required autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="description"><i class="fa-solid fa-align-left"></i> Description</label>
+          <input id="description" type="text" name="description" autocomplete="off">
+        </div>
+        <div class="form-actions">
+          <a th:href="@{/book_cat}" class="btn btn-ghost">Cancel</a>
+          <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+      </form>
+    </main>
+
+    <footer th:replace="~{base :: footer}"></footer>
+  </div>
+
+  <div th:replace="~{chat_widget :: widget}"></div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head('Add book genre · Library')}"></head>
+<body>
+  <div class="page">
+    <header th:replace="~{base :: topbar('Add book genre', 'genres')}"></header>
+    <div th:replace="~{base :: flash}"></div>
+
+    <main class="panel">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-book-circle-plus"></i> Add genre</h2>
+        <a th:href="@{/book_genre}" class="btn btn-ghost"><i class="fa-solid fa-arrow-left"></i> Back</a>
+      </div>
+      <form class="edit-form" th:action="@{/book_genre/add}" method="post">
+        <div class="form-group">
+          <label for="genre_title"><i class="fa-solid fa-masks-theater"></i> Genre name</label>
+          <input id="genre_title" type="text" name="genre_title" required autocomplete="off">
+        </div>
+        <div class="form-actions">
+          <a th:href="@{/book_genre}" class="btn btn-ghost">Cancel</a>
+          <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+      </form>
+    </main>
+
+    <footer th:replace="~{base :: footer}"></footer>
+  </div>
+
+  <div th:replace="~{chat_widget :: widget}"></div>
+</body>
+</html>

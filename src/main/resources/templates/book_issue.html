@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head('Book Issues · Library')}"></head>
+<body>
+  <div class="page">
+    <header th:replace="~{base :: topbar('Book Issues', 'issues')}"></header>
+    <div th:replace="~{base :: flash}"></div>
+
+    <main class="panel">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-table-list"></i> Book Issues</h2>
+        <a th:href="@{/book_issue/add}" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>transaction_date</th>
+              <th>timestamp</th>
+              <th>book_id</th>
+              <th>issued_date</th>
+              <th>issued_to</th>
+              <th>recieved_by</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="issue : ${issues}">
+              <td data-label="transaction_date" th:text="${issue.transactionDate}">—</td>
+              <td data-label="timestamp" th:text="${issue.timestamp}">—</td>
+              <td data-label="book_id" th:text="${issue.bookId}">—</td>
+              <td data-label="issued_date" th:text="${issue.issuedDate}">—</td>
+              <td data-label="issued_to" th:text="${issue.issuedTo}">—</td>
+              <td data-label="recieved_by" th:text="${issue.recievedBy}">—</td>
+              <td data-label="Actions">
+                <div class="row-actions">
+                  <a th:href="@{/book_issue/return/{rowNum}(rowNum=${issue.rowNum})}" class="btn-icon" title="Return"><i class="fa-solid fa-rotate-left"></i></a>
+                </div>
+              </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(issues)}">
+              <td colspan="7" class="empty-state"><i class="fa-solid fa-inbox"></i><p>No book issues found.</p></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <footer th:replace="~{base :: footer}"></footer>
+  </div>
+
+  <div th:replace="~{chat_widget :: widget}"></div>
+</body>
+</html>

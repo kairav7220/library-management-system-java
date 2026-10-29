@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" th:content="${_csrf.token}">
+  <title th:text="${title}">Library Management</title>
+  <link rel="stylesheet" th:href="@{/styles/style.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header th:fragment="topbar(heading, activeNav)" class="topbar">
+    <div class="brand">
+      <span class="brand-icon" aria-hidden="true">
+        <i class="fa-solid fa-book"></i>
+      </span>
+      <div class="brand-text">
+        <p class="eyebrow">Library Management</p>
+        <h1 th:text="${heading}">Dashboard</h1>
+      </div>
+    </div>
+    <nav class="topnav" aria-label="Main navigation">
+      <a th:href="@{/users}" class="btn btn-sm" th:classappend="${activeNav == 'users'} ? 'btn-primary' : 'btn-ghost'">Users</a>
+      <a th:href="@{/books}" class="btn btn-sm" th:classappend="${activeNav == 'books'} ? 'btn-primary' : 'btn-ghost'">Books</a>
+      <a th:href="@{/members}" class="btn btn-sm" th:classappend="${activeNav == 'members'} ? 'btn-primary' : 'btn-ghost'">Members</a>
+      <a th:href="@{/employees}" class="btn btn-sm" th:classappend="${activeNav == 'employees'} ? 'btn-primary' : 'btn-ghost'">Employees</a>
+      <a th:href="@{/book_cat}" class="btn btn-sm" th:classappend="${activeNav == 'categories'} ? 'btn-primary' : 'btn-ghost'">Categories</a>
+      <a th:href="@{/book_genre}" class="btn btn-sm" th:classappend="${activeNav == 'genres'} ? 'btn-primary' : 'btn-ghost'">Genres</a>
+      <a th:href="@{/book_issue}" class="btn btn-sm" th:classappend="${activeNav == 'issues'} ? 'btn-primary' : 'btn-ghost'">Issues</a>
+      <a th:href="@{/subscriptions}" class="btn btn-sm" th:classappend="${activeNav == 'subscriptions'} ? 'btn-primary' : 'btn-ghost'">Subscriptions</a>
+      <a th:href="@{/book_sell}" class="btn btn-sm" th:classappend="${activeNav == 'sells'} ? 'btn-primary' : 'btn-ghost'">Sells</a>
+      <a th:href="@{/payments}" class="btn btn-sm" th:classappend="${activeNav == 'payments'} ? 'btn-primary' : 'btn-ghost'">Payments</a>
+      <a th:href="@{/logs}" class="btn btn-sm" th:if="${currentUserType == 'Admin'}" th:classappend="${activeNav == 'logs'} ? 'btn-primary' : 'btn-ghost'">Logs</a>
+      <span class="user-chip">
+        <i class="fa-solid fa-circle-user"></i> <span th:text="${currentUsername}">user</span>
+        <form th:action="@{/logout}" method="post" style="display:inline">
+          <button type="submit" class="btn btn-sm btn-danger logout-btn" title="Log out"><i class="fa-solid fa-right-from-bracket"></i></button>
+        </form>
+      </span>
+    </nav>
+  </header>
+
+  <div th:fragment="flash" class="flash-stack" th:if="${flashMessages != null and !flashMessages.isEmpty()}">
+    <p class="flash" th:each="msg : ${flashMessages}" th:classappend="${'flash-' + msg.category}" th:text="${msg.message}">Message</p>
+  </div>
+
+  <footer th:fragment="footer" class="site-footer">
+    <p>Developed by
+      <a href="https://github.com/kairav7220" target="_blank" rel="noopener">kairav7220</a>
+      &mdash; Library Management System</p>
+  </footer>
+</body>
+</html>

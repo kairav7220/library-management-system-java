@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head('Add member · Library')}"></head>
+<body>
+  <div class="page">
+    <header th:replace="~{base :: topbar('Add member', 'members')}"></header>
+    <div th:replace="~{base :: flash}"></div>
+
+    <main class="panel">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-user-plus"></i> Add member</h2>
+        <a th:href="@{/members}" class="btn btn-ghost"><i class="fa-solid fa-arrow-left"></i> Back</a>
+      </div>
+      <form class="edit-form" th:action="@{/members/add}" method="post">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name"><i class="fa-solid fa-user"></i> Name</label>
+            <input id="name" type="text" name="name" required autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="email"><i class="fa-solid fa-envelope"></i> Email</label>
+            <input id="email" type="email" name="email">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="phone"><i class="fa-solid fa-phone"></i> Phone</label>
+          <input id="phone" type="text" name="phone" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="permanent_address"><i class="fa-solid fa-location-dot"></i> Permanent address</label>
+          <input id="permanent_address" type="text" name="permanent_address" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="temporary_address"><i class="fa-solid fa-location-dot"></i> Temporary address</label>
+          <input id="temporary_address" type="text" name="temporary_address" autocomplete="off">
+        </div>
+        <div class="form-actions">
+          <a th:href="@{/members}" class="btn btn-ghost">Cancel</a>
+          <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+      </form>
+    </main>
+
+    <footer th:replace="~{base :: footer}"></footer>
+  </div>
+
+  <div th:replace="~{chat_widget :: widget}"></div>
+</body>
+</html>

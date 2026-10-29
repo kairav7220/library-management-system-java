@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Blocks commits when scripts/secret-check.sh finds secrets.
+exec bash "$(git rev-parse --show-toplevel)/scripts/secret-check.sh"

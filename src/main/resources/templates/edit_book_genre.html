@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head('Edit book genre · Library')}"></head>
+<body>
+  <div class="page">
+    <header th:replace="~{base :: topbar('Edit book genre', 'genres')}"></header>
+    <div th:replace="~{base :: flash}"></div>
+
+    <main class="panel">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-pen-to-square"></i> Edit genre</h2>
+        <a th:href="@{/book_genre}" class="btn btn-ghost"><i class="fa-solid fa-arrow-left"></i> Back</a>
+      </div>
+
+      <div class="summary-card">
+        <span class="summary-avatar"><i class="fa-solid fa-masks-theater"></i></span>
+        <div class="summary-body">
+          <h2 th:text="${genre.genreTitle}">Genre</h2>
+          <p class="summary-meta">
+            <li><i class="fa-solid fa-id-badge"></i> <span th:text="${genre.genreId}">GENRE_1</span></li>
+          </p>
+        </div>
+      </div>
+
+      <p class="readonly-id" th:text="'row_num: ' + ${rowNum}">row_num: 1</p>
+
+      <form class="edit-form" th:action="@{/book_genre/edit/{rowNum}(rowNum=${rowNum})}" method="post">
+        <div class="form-group">
+          <label for="genre_title"><i class="fa-solid fa-masks-theater"></i> Genre name</label>
+          <input id="genre_title" type="text" name="genre_title" th:value="${genre.genreTitle}" required autocomplete="off">
+        </div>
+        <div class="form-actions">
+          <a th:href="@{/book_genre}" class="btn btn-ghost">Cancel</a>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </main>
+
+    <footer th:replace="~{base :: footer}"></footer>
+  </div>
+
+  <div th:replace="~{chat_widget :: widget}"></div>
+</body>
+</html>

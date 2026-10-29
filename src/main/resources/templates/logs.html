@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head('Activity logs · Library')}"></head>
+<body>
+  <div class="page">
+    <header th:replace="~{base :: topbar('Activity logs', 'logs')}"></header>
+    <div th:replace="~{base :: flash}"></div>
+
+    <main class="panel">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-table-list"></i> Activity logs</h2>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>timestamp</th>
+              <th>action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="log : ${logs}">
+              <td data-label="timestamp" th:text="${log.timestamp}">—</td>
+              <td data-label="action" th:text="${log.action}">—</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(logs)}">
+              <td colspan="2" class="empty-state"><i class="fa-solid fa-inbox"></i><p>No log entries yet.</p></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <footer th:replace="~{base :: footer}"></footer>
+  </div>
+
+  <div th:replace="~{chat_widget :: widget}"></div>
+</body>
+</html>

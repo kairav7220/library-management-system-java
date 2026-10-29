@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head('Books · Library')}"></head>
+<body>
+  <div class="page">
+    <header th:replace="~{base :: topbar('Books', 'books')}"></header>
+    <div th:replace="~{base :: flash}"></div>
+
+    <main class="panel">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-table-list"></i> Books</h2>
+        <a th:href="@{/books/add}" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>book_name</th>
+              <th>book_author</th>
+              <th>book_price</th>
+              <th>book_cat</th>
+              <th>book_genre</th>
+              <th>edition</th>
+              <th>publication</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="book : ${books}">
+              <td data-label="book_name" th:text="${book.bookName}">—</td>
+              <td data-label="book_author" th:text="${book.bookAuthor}">—</td>
+              <td data-label="book_price" th:text="${book.bookPrice}">—</td>
+              <td data-label="book_cat" th:text="${book.bookCat}">—</td>
+              <td data-label="book_genre" th:text="${book.bookGenre}">—</td>
+              <td data-label="edition" th:text="${book.edition}">—</td>
+              <td data-label="publication" th:text="${book.publication}">—</td>
+              <td data-label="Actions">
+                <div class="row-actions">
+                  <a th:href="@{/books/edit/{rowNum}(rowNum=${book.rowNum})}" class="btn-icon edit-btn" title="Edit"><i class="fa-solid fa-pencil"></i></a>
+                  <form th:action="@{/books/delete/{rowNum}(rowNum=${book.rowNum})}" method="post" style="display:inline" onsubmit="return confirm('Delete this book?')"><button type="submit" class="btn-icon delete-btn" title="Delete"><i class="fa-solid fa-trash-can"></i></button></form>
+                </div>
+              </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(books)}">
+              <td colspan="8" class="empty-state"><i class="fa-solid fa-inbox"></i><p>No active books found.</p></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <footer th:replace="~{base :: footer}"></footer>
+  </div>
+
+  <div th:replace="~{chat_widget :: widget}"></div>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head('Edit member · Library')}"></head>
+<body>
+  <div class="page">
+    <header th:replace="~{base :: topbar('Edit member', 'members')}"></header>
+    <div th:replace="~{base :: flash}"></div>
+
+    <main class="panel">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-user-pen"></i> Edit member</h2>
+        <a th:href="@{/members}" class="btn btn-ghost"><i class="fa-solid fa-arrow-left"></i> Back</a>
+      </div>
+
+      <div class="summary-card">
+        <span class="summary-avatar"><i class="fa-solid fa-user"></i></span>
+        <div class="summary-body">
+          <h2 th:text="${member.name}">Member</h2>
+          <p class="summary-meta">
+            <li><i class="fa-solid fa-id-badge"></i> <span th:text="${member.memId}">MEM_1</span></li>
+            <li th:classappend="${member.status == 0} ? 'ok' : 'bad'">
+              <i class="fa-solid fa-circle-check" th:if="${member.status == 0}"></i>
+              <i class="fa-solid fa-circle-xmark" th:unless="${member.status == 0}"></i>
+              <span th:text="${member.status == 0} ? 'Active' : 'Deleted'">Active</span>
+            </li>
+          </p>
+        </div>
+      </div>
+
+      <p class="readonly-id" th:text="'row_num: ' + ${rowNum}">row_num: 1</p>
+
+      <form class="edit-form" th:action="@{/members/edit/{rowNum}(rowNum=${rowNum})}" method="post">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name"><i class="fa-solid fa-user"></i> Name</label>
+            <input id="name" type="text" name="name" th:value="${member.name}" required autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="password"><i class="fa-solid fa-lock"></i> Password (leave blank to keep)</label>
+            <input id="password" type="password" name="password">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email"><i class="fa-solid fa-envelope"></i> Email</label>
+            <input id="email" type="email" name="email" th:value="${member.email}" required>
+          </div>
+          <div class="form-group">
+            <label for="phone"><i class="fa-solid fa-phone"></i> Phone</label>
+            <input id="phone" type="text" name="phone" th:value="${member.phone}" autocomplete="off">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="permanent_address"><i class="fa-solid fa-location-dot"></i> Permanent address</label>
+          <input id="permanent_address" type="text" name="permanent_address" th:value="${member.permanentAddress}" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="temporary_address"><i class="fa-solid fa-location-dot"></i> Temporary address</label>
+          <input id="temporary_address" type="text" name="temporary_address" th:value="${member.temporaryAddress}" autocomplete="off">
+        </div>
+        <div class="form-actions">
+          <a th:href="@{/members}" class="btn btn-ghost">Cancel</a>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </main>
+
+    <footer th:replace="~{base :: footer}"></footer>
+  </div>
+
+  <div th:replace="~{chat_widget :: widget}"></div>
+</body>
+</html>

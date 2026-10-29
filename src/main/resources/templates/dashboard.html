@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head('Dashboard · Library')}"></head>
+<body>
+  <div class="page">
+    <header th:replace="~{base :: topbar('Dashboard', '')}"></header>
+    <div th:replace="~{base :: flash}"></div>
+
+    <main class="panel">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-chart-line"></i> Library overview</h2>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card">
+          <p class="stat-label"><i class="fa-solid fa-book"></i> Active books</p>
+          <p class="stat-value" th:text="${totalBooks}">0</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label"><i class="fa-solid fa-users"></i> Active members</p>
+          <p class="stat-value" th:text="${totalMembers}">0</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label"><i class="fa-solid fa-arrow-right-from-bracket"></i> Books out</p>
+          <p class="stat-value" th:text="${issuedCount}">0</p>
+        </div>
+        <div class="stat-card" th:classappend="${overdueCount > 0} ? 'warn'">
+          <p class="stat-label"><i class="fa-solid fa-triangle-exclamation"></i> Overdue</p>
+          <p class="stat-value" th:text="${overdueCount}">0</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label"><i class="fa-solid fa-sack-dollar"></i> Revenue</p>
+          <p class="stat-value" th:text="'₹' + ${#numbers.formatDecimal(revenue, 1, 'POINT', 2, 'POINT')}">₹0.00</p>
+        </div>
+      </div>
+    </main>
+
+    <main class="panel" th:if="${currentUserType == 'Admin'}">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-clock-rotate-left"></i> Recent activity</h2>
+        <a th:href="@{/logs}" class="btn btn-ghost"><i class="fa-solid fa-list"></i> All logs</a>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>timestamp</th><th>action</th></tr>
+          </thead>
+          <tbody>
+            <tr th:each="log : ${recentLogs}">
+              <td data-label="timestamp" th:text="${log.timestamp}">—</td>
+              <td data-label="action" th:text="${log.action}">—</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(recentLogs)}">
+              <td colspan="2" class="empty-state"><i class="fa-solid fa-inbox"></i><p>No activity yet.</p></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <footer th:replace="~{base :: footer}"></footer>
+  </div>
+
+  <div th:replace="~{chat_widget :: widget}"></div>
+</body>
+</html>

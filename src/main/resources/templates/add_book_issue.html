@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head('Add book issue · Library')}"></head>
+<body>
+  <div class="page">
+    <header th:replace="~{base :: topbar('Add book issue', 'issues')}"></header>
+    <div th:replace="~{base :: flash}"></div>
+
+    <main class="panel">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-book-circle-plus"></i> Add book issue</h2>
+        <a th:href="@{/book_issue}" class="btn btn-ghost"><i class="fa-solid fa-arrow-left"></i> Back</a>
+      </div>
+      <form class="edit-form" th:action="@{/book_issue/add}" method="post">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="book_id"><i class="fa-solid fa-book"></i> Book</label>
+            <select id="book_id" name="book_id" required>
+              <option value="">Select book…</option>
+              <option th:each="b : ${books}" th:value="${b.id}" th:text="${b.label}">BOOK_1 — Book</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="issued_to"><i class="fa-solid fa-user"></i> Issued to (member)</label>
+            <select id="issued_to" name="issued_to" required>
+              <option value="">Select member…</option>
+              <option th:each="m : ${members}" th:value="${m.id}" th:text="${m.label}">MEM_1 — Member</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="issued_date"><i class="fa-solid fa-calendar"></i> Issue date</label>
+            <input id="issued_date" type="text" name="issued_date" placeholder="YYYY-MM-DD" required>
+          </div>
+          <div class="form-group">
+            <label for="recieved_by"><i class="fa-solid fa-user-check"></i> Received by (employee)</label>
+            <select id="recieved_by" name="recieved_by">
+              <option value="">Select employee…</option>
+              <option th:each="e : ${employees}" th:value="${e.id}" th:text="${e.label}">EMP_1 — Employee</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-actions">
+          <a th:href="@{/book_issue}" class="btn btn-ghost">Cancel</a>
+          <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+      </form>
+    </main>
+
+    <footer th:replace="~{base :: footer}"></footer>
+  </div>
+
+  <div th:replace="~{chat_widget :: widget}"></div>
+</body>
+</html>

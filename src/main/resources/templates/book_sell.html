@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head('Book Sells · Library')}"></head>
+<body>
+  <div class="page">
+    <header th:replace="~{base :: topbar('Book Sells', 'sells')}"></header>
+    <div th:replace="~{base :: flash}"></div>
+
+    <main class="panel">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-table-list"></i> Book Sells</h2>
+        <a th:href="@{/book_sell/add}" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>order_date</th>
+              <th>timestamp</th>
+              <th>book_id</th>
+              <th>book_name</th>
+              <th>book_price</th>
+              <th>mem_id</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="sell : ${sells}">
+              <td data-label="order_date" th:text="${sell.orderDate}">—</td>
+              <td data-label="timestamp" th:text="${sell.timestamp}">—</td>
+              <td data-label="book_id" th:text="${sell.bookId}">—</td>
+              <td data-label="book_name" th:text="${sell.bookName}">—</td>
+              <td data-label="book_price" th:text="${sell.bookPrice}">—</td>
+              <td data-label="mem_id" th:text="${sell.memId}">—</td>
+              <td data-label="Actions">
+                <div class="row-actions">
+                  <a th:href="@{/book_sell/edit/{rowNum}(rowNum=${sell.rowNum})}" class="btn-icon edit-btn" title="Edit"><i class="fa-solid fa-pencil"></i></a>
+                </div>
+              </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(sells)}">
+              <td colspan="7" class="empty-state"><i class="fa-solid fa-inbox"></i><p>No sell records found.</p></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <footer th:replace="~{base :: footer}"></footer>
+  </div>
+
+  <div th:replace="~{chat_widget :: widget}"></div>
+</body>
+</html>

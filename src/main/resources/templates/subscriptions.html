@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head('Subscriptions · Library')}"></head>
+<body>
+  <div class="page">
+    <header th:replace="~{base :: topbar('Subscriptions', 'subscriptions')}"></header>
+    <div th:replace="~{base :: flash}"></div>
+
+    <main class="panel">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-table-list"></i> Subscriptions</h2>
+        <a th:href="@{/subscriptions/add}" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>transaction_date</th>
+              <th>timestamp</th>
+              <th>plan_mode</th>
+              <th>mem_id</th>
+              <th>mem_subscription_amount</th>
+              <th>plan_type</th>
+              <th>plan_start</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="subscription : ${subscriptions}">
+              <td data-label="transaction_date" th:text="${subscription.transactionDate}">—</td>
+              <td data-label="timestamp" th:text="${subscription.timestamp}">—</td>
+              <td data-label="plan_mode" th:text="${subscription.planMode}">—</td>
+              <td data-label="mem_id" th:text="${subscription.memId}">—</td>
+              <td data-label="mem_subscription_amount" th:text="${subscription.memSubscriptionAmount}">—</td>
+              <td data-label="plan_type" th:text="${subscription.planType}">—</td>
+              <td data-label="plan_start" th:text="${subscription.planStart}">—</td>
+              <td data-label="Actions">
+                <div class="row-actions">
+                  <a th:href="@{/subscriptions/edit/{rowNum}(rowNum=${subscription.rowNum})}" class="btn-icon edit-btn" title="Edit"><i class="fa-solid fa-pencil"></i></a>
+                  <form th:action="@{/subscriptions/delete/{rowNum}(rowNum=${subscription.rowNum})}" method="post" style="display:inline" onsubmit="return confirm('Delete this subscription?')"><button type="submit" class="btn-icon delete-btn" title="Delete"><i class="fa-solid fa-trash-can"></i></button></form>
+                </div>
+              </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(subscriptions)}">
+              <td colspan="8" class="empty-state"><i class="fa-solid fa-inbox"></i><p>No subscriptions found.</p></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <footer th:replace="~{base :: footer}"></footer>
+  </div>
+
+  <div th:replace="~{chat_widget :: widget}"></div>
+</body>
+</html>
