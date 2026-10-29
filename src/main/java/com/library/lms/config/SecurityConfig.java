@@ -2,6 +2,7 @@ package com.library.lms.config;
 
 import com.library.lms.security.AuditLogoutHandler;
 import com.library.lms.security.CompositePasswordEncoder;
+import com.library.lms.security.CustomAccessDeniedHandler;
 import com.library.lms.security.LoginEntryPoint;
 import com.library.lms.security.LoginFailureHandler;
 import com.library.lms.security.LoginSuccessHandler;
@@ -22,7 +23,8 @@ public class SecurityConfig {
                                                    LoginSuccessHandler successHandler,
                                                    LoginFailureHandler failureHandler,
                                                    AuditLogoutHandler logoutHandler,
-                                                   LoginEntryPoint entryPoint) throws Exception {
+                                                   LoginEntryPoint entryPoint,
+                                                   CustomAccessDeniedHandler accessDeniedHandler) throws Exception {
         HttpSessionCsrfTokenRepository csrfRepository = new HttpSessionCsrfTokenRepository();
         csrfRepository.setHeaderName("X-CSRFToken");
         http
@@ -42,7 +44,9 @@ public class SecurityConfig {
                 .requestMatchers("/login", "/error", "/js/**", "/styles/**", "/favicon.ico").permitAll()
                 .requestMatchers("/logs").hasRole("Admin")
                 .anyRequest().authenticated())
-            .exceptionHandling(ex -> ex.authenticationEntryPoint(entryPoint));
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint(entryPoint)
+                .accessDeniedHandler(accessDeniedHandler));
         return http.build();
     }
 
