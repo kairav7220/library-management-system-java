@@ -36,7 +36,7 @@
 
 A full-featured **college OOPS project**: a library management system built with **Java 21** and **Spring Boot**, backed by a real **MySQL** relational database (hosted on **TiDB Cloud**) with a streaming chat widget powered by a LangChain4j AI concierge. Manage books, members, employees, subscriptions, payments, and issues — or just ask **Lumina Concierge** in plain language.
 
-This is the **third version** of the project — following the [original Google-Sheets app](https://github.com/kairav7220/library-management-system) (v1, Flask + Vercel) and the [DBMS edition](https://github.com/kairav7220/library-management-system-dbms) (v2, Flask + MySQL on TiDB Cloud). This **Java edition** (v3) rebuilds the same system with Spring Boot: same database, same 12-table schema, same Suttling Desk UI, and the same SSE chat contract.
+This is the **third version** of the project — the [original](https://github.com/kairav7220/library-management-system) ran on Google Sheets, the [DBMS edition](https://github.com/kairav7220/library-management-system-dbms) moved the data into MySQL, and this **Java edition** rewrites the whole app in Java: same database, same 12-table schema, same Suttling Desk UI, and the same SSE chat contract.
 
 ## Features
 
