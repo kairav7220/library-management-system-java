@@ -1,6 +1,7 @@
 package com.library.lms.controller;
 
 import com.library.lms.entity.Book;
+import com.library.lms.exception.NotFoundException;
 import com.library.lms.service.BookService;
 import com.library.lms.web.FlashService;
 import org.springframework.stereotype.Controller;
@@ -50,7 +51,7 @@ public class BookController {
     @GetMapping("/books/edit/{rowNum}")
     public String editForm(@PathVariable("rowNum") Integer rowNum, Model model) {
         Book book = bookService.getByRowNum(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("Book not found."));
+                .orElseThrow(() -> new NotFoundException("Book not found."));
         model.addAttribute("book", book);
         model.addAttribute("rowNum", rowNum);
         return "edit_book";

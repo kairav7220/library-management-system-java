@@ -3,6 +3,9 @@ package com.library.lms.service;
 import com.library.lms.entity.Book;
 import com.library.lms.entity.BookIssue;
 import com.library.lms.entity.Member;
+import com.library.lms.exception.DuplicateException;
+import com.library.lms.exception.NotFoundException;
+import com.library.lms.exception.ValidationException;
 import com.library.lms.repository.BookIssueRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,10 +78,10 @@ public class IssueService {
         Book book = resolveBook(bookRef);
         Member member = memberService.requireByRef(memberRef);
         if (member.getStatus() != null && member.getStatus() == 1) {
-            throw new IllegalArgumentException("Member " + member.getMemId() + " is inactive.");
+            throw new ValidationException("Member " + member.getMemId() + " is inactive.");
         }
         if (bookIssueRepository.findOpenIssueByBook(book.getBookId()).isPresent()) {
-            throw new IllegalArgumentException("Book " + book.getBookId() + " is already issued.");
+            throw new DuplicateException("Book " + book.getBookId() + " is already issued.");
         }
         String employeeId = resolveEmployeeId(employeeRef);
         String today = LocalDate.now().format(DATE);
@@ -96,15 +99,15 @@ public class IssueService {
     @Transactional
     public BookIssue returnBook(String bookOrTxnRef, String returnedDate) {
         if (bookOrTxnRef == null || bookOrTxnRef.isBlank()) {
-            throw new IllegalArgumentException("Book or transaction reference is required.");
+            throw new ValidationException("Book or transaction reference is required.");
         }
         String ref = bookOrTxnRef.trim();
         BookIssue issue = bookIssueRepository.findByTransactionId(ref)
                 .or(() -> bookIssueRepository.findOpenIssueByBook(ref))
                 .or(() -> resolveByNameOrOpenIssue(ref))
-                .orElseThrow(() -> new IllegalArgumentException("No open issue found for '" + ref + "'."));
+                .orElseThrow(() -> new NotFoundException("No open issue found for '" + ref + "'."));
         if (issue.getReturnedDate() != null && !issue.getReturnedDate().isBlank()) {
-            throw new IllegalArgumentException("Issue " + issue.getTransactionId() + " is already returned.");
+            throw new DuplicateException("Issue " + issue.getTransactionId() + " is already returned.");
         }
         issue.setReturnedDate(returnedDate == null || returnedDate.isBlank()
                 ? LocalDate.now().format(DATE) : returnedDate.trim());
@@ -114,9 +117,9 @@ public class IssueService {
     @Transactional
     public BookIssue returnByRowNum(Integer rowNum, String employeeRef) {
         BookIssue issue = bookIssueRepository.findById(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("Issue not found."));
+                .orElseThrow(() -> new NotFoundException("Issue not found."));
         if (issue.getReturnedDate() != null && !issue.getReturnedDate().isBlank()) {
-            throw new IllegalArgumentException("Issue " + issue.getTransactionId() + " is already returned.");
+            throw new DuplicateException("Issue " + issue.getTransactionId() + " is already returned.");
         }
         issue.setReturnedDate(LocalDate.now().format(DATE));
         String employeeId = resolveEmployeeId(employeeRef);
@@ -144,7 +147,7 @@ public class IssueService {
 
     private Book resolveBook(String bookRef) {
         if (bookRef == null || bookRef.isBlank()) {
-            throw new IllegalArgumentException("Book reference is required.");
+            throw new ValidationException("Book reference is required.");
         }
         String ref = bookRef.trim();
         Optional<Book> byId = bookService.getById(ref);
@@ -156,9 +159,9 @@ public class IssueService {
             return matches.get(0);
         }
         if (matches.size() > 1) {
-            throw new IllegalArgumentException("Multiple books match '" + ref + "'. Use the BOOK_ id.");
+            throw new NotFoundException("Multiple books match '" + ref + "'. Use the BOOK_ id.");
         }
-        throw new IllegalArgumentException("No book found for '" + ref + "'.");
+        throw new NotFoundException("No book found for '" + ref + "'.");
     }
 
     private String resolveEmployeeId(String employeeRef) {
@@ -171,6 +174,6 @@ public class IssueService {
                         || e.getName().toLowerCase(Locale.ROOT).contains(ref))
                 .findFirst()
                 .map(e -> e.getEmpId())
-                .orElseThrow(() -> new IllegalArgumentException("No employee found for '" + employeeRef + "'."));
+                .orElseThrow(() -> new NotFoundException("No employee found for '" + employeeRef + "'."));
     }
 }

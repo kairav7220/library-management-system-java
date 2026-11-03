@@ -3,6 +3,7 @@ package com.library.lms.service;
 import com.library.lms.entity.Book;
 import com.library.lms.entity.BookSell;
 import com.library.lms.entity.Payment;
+import com.library.lms.exception.NotFoundException;
 import com.library.lms.repository.BookSellRepository;
 import com.library.lms.repository.PaymentRepository;
 import org.springframework.stereotype.Service;
@@ -42,13 +43,13 @@ public class BookSellService {
 
     public BookSell getByRowNum(Integer rowNum) {
         return bookSellRepository.findById(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("Sell record not found."));
+                .orElseThrow(() -> new NotFoundException("Sell record not found."));
     }
 
     @Transactional
     public BookSell update(Integer rowNum, String bookId, String bookName, BigDecimal price, String memId) {
         BookSell sell = bookSellRepository.findById(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("Sell record not found."));
+                .orElseThrow(() -> new NotFoundException("Sell record not found."));
         Validators.requireNonBlank("Book", bookId);
         Validators.requireNonBlank("Member", memId);
         Validators.requireNonNegative("Price", price);
@@ -63,7 +64,7 @@ public class BookSellService {
     public BookSell sell(String bookRef, String memberRef, BigDecimal price, String paymentMode,
                          String orderDate) {
         Book book = bookService.search(bookRef).stream().findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No book found for '" + bookRef + "'."));
+                .orElseThrow(() -> new NotFoundException("No book found for '" + bookRef + "'."));
         var member = memberService.requireByRef(memberRef);
         BigDecimal amount = price != null ? price : book.getBookPrice();
         Validators.requireNonNegative("Price", amount);

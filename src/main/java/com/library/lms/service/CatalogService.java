@@ -2,6 +2,8 @@ package com.library.lms.service;
 
 import com.library.lms.entity.BookCategory;
 import com.library.lms.entity.BookGenre;
+import com.library.lms.exception.NotFoundException;
+import com.library.lms.exception.ValidationException;
 import com.library.lms.repository.BookCategoryRepository;
 import com.library.lms.repository.BookGenreRepository;
 import org.springframework.stereotype.Service;
@@ -33,18 +35,18 @@ public class CatalogService {
 
     public BookCategory getCategory(Integer rowNum) {
         return categoryRepository.findById(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("Category not found."));
+                .orElseThrow(() -> new NotFoundException("Category not found."));
     }
 
     public BookGenre getGenre(Integer rowNum) {
         return genreRepository.findById(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("Genre not found."));
+                .orElseThrow(() -> new NotFoundException("Genre not found."));
     }
 
     @Transactional
     public BookCategory createCategory(String catName, String description, String bookNames) {
         if (catName == null || catName.isBlank()) {
-            throw new IllegalArgumentException("Category name is required.");
+            throw new ValidationException("Category name is required.");
         }
         BookCategory category = new BookCategory();
         category.setCatId(idGenerator.nextId("CAT", categoryRepository.findAll(), BookCategory::getRowNum));
@@ -59,7 +61,7 @@ public class CatalogService {
     public BookCategory updateCategory(Integer rowNum, String catName, String description, String bookNames) {
         BookCategory category = getCategory(rowNum);
         if (catName == null || catName.isBlank()) {
-            throw new IllegalArgumentException("Category name is required.");
+            throw new ValidationException("Category name is required.");
         }
         category.setCatName(catName.trim());
         category.setDescription(description);
@@ -77,7 +79,7 @@ public class CatalogService {
     @Transactional
     public BookGenre createGenre(String genreTitle, String bookNames) {
         if (genreTitle == null || genreTitle.isBlank()) {
-            throw new IllegalArgumentException("Genre title is required.");
+            throw new ValidationException("Genre title is required.");
         }
         BookGenre genre = new BookGenre();
         genre.setGenreId(idGenerator.nextId("GENRE", genreRepository.findAll(), BookGenre::getRowNum));
@@ -91,7 +93,7 @@ public class CatalogService {
     public BookGenre updateGenre(Integer rowNum, String genreTitle, String bookNames) {
         BookGenre genre = getGenre(rowNum);
         if (genreTitle == null || genreTitle.isBlank()) {
-            throw new IllegalArgumentException("Genre title is required.");
+            throw new ValidationException("Genre title is required.");
         }
         genre.setGenreTitle(genreTitle.trim());
         genre.setBookNames(bookNames);

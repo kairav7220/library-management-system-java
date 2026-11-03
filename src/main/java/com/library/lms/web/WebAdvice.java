@@ -40,7 +40,16 @@ public class WebAdvice {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public String handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request) {
-        flashService.add(request, "error", ex.getMessage());
+        return flashAndBack(ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(com.library.lms.exception.LmsException.class)
+    public String handleLms(com.library.lms.exception.LmsException ex, HttpServletRequest request) {
+        return flashAndBack(ex.getMessage(), request);
+    }
+
+    private String flashAndBack(String message, HttpServletRequest request) {
+        flashService.add(request, "error", message);
         return "redirect:" + safeBack(request);
     }
 

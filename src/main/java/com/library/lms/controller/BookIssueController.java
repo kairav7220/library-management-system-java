@@ -1,6 +1,8 @@
 package com.library.lms.controller;
 
 import com.library.lms.entity.BookIssue;
+import com.library.lms.exception.DuplicateException;
+import com.library.lms.exception.NotFoundException;
 import com.library.lms.service.IssueService;
 import com.library.lms.web.DropdownService;
 import com.library.lms.web.FlashService;
@@ -52,9 +54,9 @@ public class BookIssueController {
     @GetMapping("/book_issue/return/{rowNum}")
     public String returnForm(@PathVariable("rowNum") Integer rowNum, Model model) {
         BookIssue issue = issueService.getByRowNum(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("Issue not found."));
+                .orElseThrow(() -> new NotFoundException("Issue not found."));
         if (issue.getReturnedDate() != null && !issue.getReturnedDate().isBlank()) {
-            throw new IllegalArgumentException("Issue " + issue.getTransactionId() + " is already returned.");
+            throw new DuplicateException("Issue " + issue.getTransactionId() + " is already returned.");
         }
         model.addAttribute("issue", issue);
         model.addAttribute("employees", dropdownService.employees());

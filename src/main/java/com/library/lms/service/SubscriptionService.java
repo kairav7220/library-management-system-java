@@ -1,6 +1,7 @@
 package com.library.lms.service;
 
 import com.library.lms.entity.Subscription;
+import com.library.lms.exception.NotFoundException;
 import com.library.lms.repository.SubscriptionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +44,7 @@ public class SubscriptionService {
 
     public Subscription getByRowNum(Integer rowNum) {
         return subscriptionRepository.findById(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("Subscription not found."));
+                .orElseThrow(() -> new NotFoundException("Subscription not found."));
     }
 
     public List<Subscription> byMember(String memberRef) {
@@ -90,7 +91,7 @@ public class SubscriptionService {
                                String memId, BigDecimal amount, String planType,
                                String planStart, String planEnd, Integer subscriptionStatus) {
         Subscription subscription = subscriptionRepository.findById(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("Subscription not found."));
+                .orElseThrow(() -> new NotFoundException("Subscription not found."));
         Validators.requireNonBlank("Member", memId);
         Validators.requireNonBlank("Plan mode", planMode);
         Validators.requireNonNegative("Amount", amount);
@@ -109,7 +110,7 @@ public class SubscriptionService {
     @Transactional
     public void delete(Integer rowNum) {
         Subscription subscription = subscriptionRepository.findById(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("Subscription not found."));
+                .orElseThrow(() -> new NotFoundException("Subscription not found."));
         subscription.setSubscriptionStatus(1);
         subscriptionRepository.save(subscription);
     }

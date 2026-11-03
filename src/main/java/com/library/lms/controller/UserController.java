@@ -1,6 +1,7 @@
 package com.library.lms.controller;
 
 import com.library.lms.entity.User;
+import com.library.lms.exception.NotFoundException;
 import com.library.lms.service.UserService;
 import com.library.lms.web.FlashService;
 import org.springframework.stereotype.Controller;
@@ -46,7 +47,7 @@ public class UserController {
     @GetMapping("/users/edit/{rowNum}")
     public String editForm(@PathVariable("rowNum") Integer rowNum, Model model) {
         User user = userService.getByRowNum(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+                .orElseThrow(() -> new NotFoundException("User not found."));
         model.addAttribute("user", user);
         model.addAttribute("rowNum", rowNum);
         return "form";
@@ -57,7 +58,7 @@ public class UserController {
                        @RequestParam(value = "password", required = false) String password,
                        @RequestParam(value = "phone", required = false) String phone) {
         User existing = userService.getByRowNum(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+                .orElseThrow(() -> new NotFoundException("User not found."));
         userService.update(rowNum, existing.getUserType(), existing.getUsername(),
                 password, existing.getEmail(), phone);
         flashService.add("success", "User updated.");

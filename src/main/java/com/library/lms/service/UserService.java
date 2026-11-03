@@ -1,6 +1,9 @@
 package com.library.lms.service;
 
 import com.library.lms.entity.User;
+import com.library.lms.exception.DuplicateException;
+import com.library.lms.exception.NotFoundException;
+import com.library.lms.exception.ValidationException;
 import com.library.lms.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -50,7 +53,7 @@ public class UserService {
         Validators.requireNonBlank("Password", rawPassword);
         Validators.requireEmail("Email", email);
         if (userRepository.findByUsername(username.trim()).isPresent()) {
-            throw new IllegalArgumentException("That username already exists.");
+            throw new DuplicateException("That username already exists.");
         }
         User user = new User();
         user.setUserId(idGenerator.nextId("USER", userRepository.findAll(), User::getRowNum));
@@ -67,14 +70,14 @@ public class UserService {
     public User update(Integer rowNum, String userType, String username, String rawPassword,
                        String email, String phone) {
         User user = userRepository.findById(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+                .orElseThrow(() -> new NotFoundException("User not found."));
         if (username == null || username.isBlank()) {
-            throw new IllegalArgumentException("Username is required.");
+            throw new ValidationException("Username is required.");
         }
         userRepository.findByUsername(username.trim())
                 .filter(existing -> !existing.getRowNum().equals(rowNum))
                 .ifPresent(existing -> {
-                    throw new IllegalArgumentException("That username already exists.");
+                    throw new DuplicateException("That username already exists.");
                 });
         user.setUserType(userType);
         user.setUsername(username.trim());
@@ -89,7 +92,7 @@ public class UserService {
     @Transactional
     public void softDelete(Integer rowNum) {
         User user = userRepository.findById(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+                .orElseThrow(() -> new NotFoundException("User not found."));
         user.setStatus(1);
         userRepository.save(user);
     }

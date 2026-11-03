@@ -1,6 +1,8 @@
 package com.library.lms.service;
 
 import com.library.lms.entity.Member;
+import com.library.lms.exception.NotFoundException;
+import com.library.lms.exception.ValidationException;
 import com.library.lms.repository.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -48,7 +50,7 @@ public class MemberService {
 
     public Member requireByRef(String memberRef) {
         if (memberRef == null || memberRef.isBlank()) {
-            throw new IllegalArgumentException("Member reference is required.");
+            throw new ValidationException("Member reference is required.");
         }
         String ref = memberRef.trim();
         Optional<Member> byId = memberRepository.findByMemId(ref);
@@ -63,9 +65,9 @@ public class MemberService {
             return matches.get(0);
         }
         if (matches.size() > 1) {
-            throw new IllegalArgumentException("Multiple members match '" + ref + "'. Use the MEM_ id.");
+            throw new NotFoundException("Multiple members match '" + ref + "'. Use the MEM_ id.");
         }
-        throw new IllegalArgumentException("No member found for '" + ref + "'.");
+        throw new NotFoundException("No member found for '" + ref + "'.");
     }
 
     public List<Member> search(String query) {
@@ -100,7 +102,7 @@ public class MemberService {
     public Member update(Integer rowNum, String name, String rawPassword, String email, String phone,
                          String permanentAddress, String temporaryAddress) {
         Member member = memberRepository.findById(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("Member not found."));
+                .orElseThrow(() -> new NotFoundException("Member not found."));
         Validators.requireNonBlank("Name", name);
         member.setName(name.trim());
         if (rawPassword != null && !rawPassword.isBlank()) {
@@ -116,7 +118,7 @@ public class MemberService {
     @Transactional
     public void softDelete(Integer rowNum) {
         Member member = memberRepository.findById(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("Member not found."));
+                .orElseThrow(() -> new NotFoundException("Member not found."));
         member.setStatus(1);
         memberRepository.save(member);
     }

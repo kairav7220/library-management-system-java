@@ -1,6 +1,7 @@
 package com.library.lms.controller;
 
 import com.library.lms.entity.Employee;
+import com.library.lms.exception.NotFoundException;
 import com.library.lms.service.EmployeeService;
 import com.library.lms.web.FlashService;
 import org.springframework.stereotype.Controller;
@@ -51,7 +52,7 @@ public class EmployeeController {
     @GetMapping("/employees/edit/{rowNum}")
     public String editForm(@PathVariable("rowNum") Integer rowNum, Model model) {
         Employee employee = employeeService.getByRowNum(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("Employee not found."));
+                .orElseThrow(() -> new NotFoundException("Employee not found."));
         model.addAttribute("employee", employee);
         model.addAttribute("rowNum", rowNum);
         return "edit_employee";

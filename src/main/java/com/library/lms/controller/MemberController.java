@@ -1,6 +1,7 @@
 package com.library.lms.controller;
 
 import com.library.lms.entity.Member;
+import com.library.lms.exception.NotFoundException;
 import com.library.lms.service.MemberService;
 import com.library.lms.web.FlashService;
 import org.springframework.stereotype.Controller;
@@ -46,7 +47,7 @@ public class MemberController {
     @GetMapping("/members/edit/{rowNum}")
     public String editForm(@PathVariable("rowNum") Integer rowNum, Model model) {
         Member member = memberService.getByRowNum(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("Member not found."));
+                .orElseThrow(() -> new NotFoundException("Member not found."));
         model.addAttribute("member", member);
         model.addAttribute("rowNum", rowNum);
         return "edit_member";

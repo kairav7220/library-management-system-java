@@ -1,6 +1,7 @@
 package com.library.lms.service;
 
 import com.library.lms.entity.Employee;
+import com.library.lms.exception.NotFoundException;
 import com.library.lms.repository.EmployeeRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -74,7 +75,7 @@ public class EmployeeService {
                            String designation, BigDecimal salary,
                            String permanentAddress, String temporaryAddress) {
         Employee employee = employeeRepository.findById(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("Employee not found."));
+                .orElseThrow(() -> new NotFoundException("Employee not found."));
         Validators.requireNonBlank("Name", name);
         employee.setName(name.trim());
         if (rawPassword != null && !rawPassword.isBlank()) {
@@ -92,7 +93,7 @@ public class EmployeeService {
     @Transactional
     public void softDelete(Integer rowNum) {
         Employee employee = employeeRepository.findById(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("Employee not found."));
+                .orElseThrow(() -> new NotFoundException("Employee not found."));
         employee.setStatus(1);
         employeeRepository.save(employee);
     }

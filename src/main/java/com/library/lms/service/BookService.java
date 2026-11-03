@@ -1,6 +1,8 @@
 package com.library.lms.service;
 
 import com.library.lms.entity.Book;
+import com.library.lms.exception.NotFoundException;
+import com.library.lms.exception.ValidationException;
 import com.library.lms.repository.BookRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,7 +49,7 @@ public class BookService {
                        String bookCat, String bookGenre, String edition, String publication) {
         Validators.requireNonNegative("Price", bookPrice);
         if (bookName == null || bookName.isBlank()) {
-            throw new IllegalArgumentException("Book name is required.");
+            throw new ValidationException("Book name is required.");
         }
         Book book = new Book();
         book.setBookId(idGenerator.nextId("BOOK", bookRepository.findAll(), Book::getRowNum));
@@ -66,9 +68,9 @@ public class BookService {
     public Book update(Integer rowNum, String bookName, String bookAuthor, BigDecimal bookPrice,
                        String bookCat, String bookGenre, String edition, String publication) {
         Book book = bookRepository.findById(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("Book not found."));
+                .orElseThrow(() -> new NotFoundException("Book not found."));
         if (bookName == null || bookName.isBlank()) {
-            throw new IllegalArgumentException("Book name is required.");
+            throw new ValidationException("Book name is required.");
         }
         book.setBookName(bookName.trim());
         book.setBookAuthor(bookAuthor);
@@ -83,7 +85,7 @@ public class BookService {
     @Transactional
     public void softDelete(Integer rowNum) {
         Book book = bookRepository.findById(rowNum)
-                .orElseThrow(() -> new IllegalArgumentException("Book not found."));
+                .orElseThrow(() -> new NotFoundException("Book not found."));
         book.setStatus(1);
         bookRepository.save(book);
     }

@@ -1,6 +1,8 @@
 package com.library.lms.service;
 
 import com.library.lms.entity.Payment;
+import com.library.lms.exception.NotFoundException;
+import com.library.lms.exception.ValidationException;
 import com.library.lms.repository.PaymentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +44,7 @@ public class PaymentService {
     public Payment create(String memberRef, String employeeRef, BigDecimal amount,
                           String paymentType, String paymentMode, String paymentStatus) {
         if (amount == null) {
-            throw new IllegalArgumentException("Amount is required.");
+            throw new ValidationException("Amount is required.");
         }
         Validators.requireNonNegative("Amount", amount);
         String paidBy = "";
@@ -53,7 +55,7 @@ public class PaymentService {
         if (employeeRef != null && !employeeRef.isBlank()) {
             employeeId = employeeService.getById(employeeRef.trim())
                     .map(e -> e.getEmpId())
-                    .orElseThrow(() -> new IllegalArgumentException(
+                    .orElseThrow(() -> new NotFoundException(
                             "No employee found for '" + employeeRef + "'."));
         }
         String today = LocalDate.now().format(DATE);
